@@ -1,6 +1,6 @@
 # CondoFácil
 
-Sistema web de chamados de manutenção para condomínios (projeto da disciplina de Gerência de Projeto).
+Sistema web de administração para condomínios (projeto da disciplina de Gerência de Projeto).
 
 ## Estrutura (monorepo)
 
