@@ -42,6 +42,11 @@ export default function BarraDeNavegacao() {
                 Início
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/cadastro" onClick={fecharMenu}>
+                Cadastrar condomínio
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>
