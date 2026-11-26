@@ -71,12 +71,12 @@ export default function PaginaDeCadastroDeCondominio() {
             O condomínio{" "}
             <strong>{condominioCadastrado.nomeDoCondominio}</strong> foi
             cadastrado e o síndico ({condominioCadastrado.emailDoSindico}) já
-            está registrado. A entrada no sistema (login) será liberada nas
-            próximas etapas.
+            está registrado. Agora é só entrar no sistema com o e-mail e a senha
+            cadastrados.
           </p>
         </div>
-        <Link to="/" className="btn btn-primary">
-          Voltar para o início
+        <Link to="/login" className="btn btn-primary">
+          Ir para o login
         </Link>
       </section>
     );

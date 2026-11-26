@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
+import { useAutenticacao } from "../contexto/useAutenticacao.js";
 export default function BarraDeNavegacao() {
   const [menuEstaAberto, setMenuEstaAberto] = useState(false);
+
+  const { usuarioLogado, carregandoSessao, sairDoSistema } = useAutenticacao();
+  const navegarPara = useNavigate();
 
   function alternarMenu() {
     setMenuEstaAberto(!menuEstaAberto);
@@ -10,6 +14,12 @@ export default function BarraDeNavegacao() {
 
   function fecharMenu() {
     setMenuEstaAberto(false);
+  }
+
+  async function aoClicarEmSair() {
+    fecharMenu();
+    await sairDoSistema();
+    navegarPara("/");
   }
 
   return (
@@ -42,12 +52,51 @@ export default function BarraDeNavegacao() {
                 Início
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/cadastro" onClick={fecharMenu}>
-                Cadastrar condomínio
-              </NavLink>
-            </li>
           </ul>
+
+          {!carregandoSessao && (
+            <ul className="navbar-nav">
+              {usuarioLogado ? (
+                <>
+                  <li className="nav-item">
+                    <span className="navbar-text me-md-3">
+                      {usuarioLogado.nome}
+                    </span>
+                  </li>
+                  <li className="nav-item">
+                    <button
+                      type="button"
+                      className="btn btn-outline-light btn-sm"
+                      onClick={aoClicarEmSair}
+                    >
+                      Sair
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/cadastro"
+                      onClick={fecharMenu}
+                    >
+                      Cadastrar condomínio
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/login"
+                      onClick={fecharMenu}
+                    >
+                      Entrar
+                    </NavLink>
+                  </li>
+                </>
+              )}
+            </ul>
+          )}
         </div>
       </div>
     </nav>
