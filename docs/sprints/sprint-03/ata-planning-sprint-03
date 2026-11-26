@@ -1,1 +1,62 @@
+# Ata da Sprint Planning: Sprint 3 (Release 2)
 
+## 1. Identificação
+
+| Campo | Informação |
+|---|---|
+| Projeto | CondoFácil |
+| Sprint | Sprint 3, Release 2 |
+| Período da sprint | 17/11/2026 a 26/11/2026 (8 dias úteis) |
+| Data da Planning | 17/11/2026 [confirmar a data em que foi feita] |
+| Participantes e papéis | Samuel: PO, Scrum Master, QA e DevOps |
+
+## 2. Sprint Goal
+
+Entregar a autenticação e o controle de acesso do sistema: cadastro de condomínio e síndico, login e logout, isolamento dos dados por condomínio e cadastro de moradores e prestadores
+## 3. Backlog da sprint
+
+Total: 5 PBIs, 17 story points, 16 tasks.
+
+| US | PBI | Pontos | Prioridade | Tasks | DoR atendida |
+|---|---|---|---|---|---|
+| US05 | Criar modelo de dados de condomínio, usuário e perfil | 3 | 1 | 3 | Sim |
+| US06 | Cadastrar condomínio e síndico | 3 | 1 | 3 | Sim |
+| US07 | Login e logout | 3 | 1 | 3 | Sim |
+| US08 | Controle de acesso por perfil e isolamento por condomínio | 5 | 1 | 4 | Sim |
+| US09 | Cadastrar moradores e prestadores | 3 | 1 | 3 | Sim |
+
+**Definition of Ready (conferida em cada PBI):** história no formato "Eu como... preciso... de modo que...", critérios em Gherkin com cenário de sucesso e de exceção, estimativa em story points, prioridade definida, dependências identificadas e cabe em uma sprint.
+
+## 3.1. Dependências entre as US
+
+US05 → US06 → US07 → US08 → US09. A US09 depende da US06 e da US08, por isso fica por último na sprint.
+
+## 4. Capacidade e calendário
+
+- A sprint tem 8 dias úteis, de 17/11 a 26/11/2026.
+- Equipe de uma pessoa.
+- Carga planejada: 17 pontos.
+
+## 5. Definition of Done apresentada
+
+Foi apresentada a DoD acordada pela equipe e a DoD de US do template de cada história, testes passando, CI verde, aceite do PO e documentação atualizada. A verificação item a item acontece na Sprint Review.
+
+## 6. Riscos considerados no planejamento
+
+| Risco | Estratégia | Onde tratado |
+|---|---|---|
+| Dados de um condomínio visíveis em outro (risco 15, Evitar) | Filtro único por condomínio em todas as consultas | US08 |
+| Um perfil executando ações de outro (risco 12, Mitigar) | Validar a permissão por perfil no servidor | US08 |
+| Ex-morador com acesso (risco 12, Mitigar) | Data de saída e bloqueio do login | US09 (e driver DA-SEG-I1-02) |
+
+## 7. Decisões e pendências da Planning
+
+- A Sprint 3 segue trabalhando direto na `main`, com dois commits por US.
+
+## 8. Próximos passos
+
+1. Iniciar pela US05 e seguir a ordem das dependências.
+2. Atualizar o status das tasks no Azure Boards.
+3. Verificar a DoD na Sprint Review de 26/11/2026.
+
+Assinatura de ciência: Samuel (PO, SM, QA e DevOps) | Data: [dd/mm/aaaa]
