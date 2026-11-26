@@ -1,6 +1,7 @@
 package br.com.condofacil.condominio;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -44,7 +45,7 @@ class CadastroDeCondominioIntegracaoTest {
 
     @Test
     void deveGravarCondominioESindicoNoBancoSemGuardarASenhaEmTextoPuro() throws Exception {
-        simuladorDeRequisicoes.perform(post("/api/condominios")
+        simuladorDeRequisicoes.perform(post("/api/condominios").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON_DO_CADASTRO))
                 .andExpect(status().isCreated());
@@ -60,12 +61,12 @@ class CadastroDeCondominioIntegracaoTest {
 
     @Test
     void deveRecusarUmSegundoCadastroComOMesmoEmail() throws Exception {
-        simuladorDeRequisicoes.perform(post("/api/condominios")
+        simuladorDeRequisicoes.perform(post("/api/condominios").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON_DO_CADASTRO))
                 .andExpect(status().isCreated());
 
-        simuladorDeRequisicoes.perform(post("/api/condominios")
+        simuladorDeRequisicoes.perform(post("/api/condominios").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON_DO_CADASTRO))
                 .andExpect(status().isConflict());

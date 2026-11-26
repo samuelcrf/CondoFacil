@@ -1,6 +1,7 @@
 package br.com.condofacil.condominio;
 
 import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,8 +17,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import br.com.condofacil.usuario.EmailJaCadastradoExcecao;
-
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import org.springframework.context.annotation.Import;
+import br.com.condofacil.seguranca.ConfiguracaoDeSeguranca;
 @WebMvcTest(CondominioController.class)
+@Import(ConfiguracaoDeSeguranca.class)
 class CondominioControllerTest {
 
     private static final String JSON_VALIDO = """
@@ -53,7 +57,7 @@ class CondominioControllerTest {
         when(cadastroDeCondominioServico.cadastrar(any())).thenReturn(
                 new CondominioCadastradoResposta(1L, "Condomínio A", 2L, "sindico@condominio-a.com"));
 
-        simuladorDeRequisicoes.perform(post("/api/condominios")
+        simuladorDeRequisicoes.perform(post("/api/condominios").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON_VALIDO))
                 .andExpect(status().isCreated())
@@ -64,7 +68,7 @@ class CondominioControllerTest {
 
     @Test
     void deveResponder400ComOsErrosDeCadaCampoQuandoOsDadosSaoInvalidos() throws Exception {
-        simuladorDeRequisicoes.perform(post("/api/condominios")
+        simuladorDeRequisicoes.perform(post("/api/condominios").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON_INVALIDO))
                 .andExpect(status().isBadRequest())
@@ -78,7 +82,7 @@ class CondominioControllerTest {
 
     @Test
     void deveResponder400QuandoOJsonEstaMalformado() throws Exception {
-        simuladorDeRequisicoes.perform(post("/api/condominios")
+        simuladorDeRequisicoes.perform(post("/api/condominios").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ isto não é json"))
                 .andExpect(status().isBadRequest());
@@ -89,7 +93,7 @@ class CondominioControllerTest {
         when(cadastroDeCondominioServico.cadastrar(any()))
                 .thenThrow(new EmailJaCadastradoExcecao("sindico@condominio-a.com"));
 
-        simuladorDeRequisicoes.perform(post("/api/condominios")
+        simuladorDeRequisicoes.perform(post("/api/condominios").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON_VALIDO))
                 .andExpect(status().isConflict())
