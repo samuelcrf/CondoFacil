@@ -11,7 +11,6 @@
 | Data da Review de release | 26/11/2026 |
 | Participantes e papéis | Samuel: PO, Scrum Master, QA e DevOps |
 | Repositório | https://github.com/samuelcrf/condofacil |
-| Versão / tag | [v0.2.0, a criar no GitHub] |
 
 ## 2. Objetivo da release
 
