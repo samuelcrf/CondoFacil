@@ -7,3 +7,9 @@ export function cadastrarCondominio(dadosDoCadastro) {
     mensagemPadraoDeErro: "Não foi possível concluir o cadastro.",
   });
 }
+
+export function consultarMeuCondominio() {
+  return chamarApi("/api/condominios/meu", {
+    mensagemPadraoDeErro: "Não foi possível carregar os dados do condomínio.",
+  });
+}

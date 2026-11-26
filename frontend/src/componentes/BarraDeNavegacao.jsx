@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import { useAutenticacao } from "../contexto/useAutenticacao.js";
+import { rotuloDoPerfil } from "../utilitarios/rotulosDePerfil.js";
+
 export default function BarraDeNavegacao() {
   const [menuEstaAberto, setMenuEstaAberto] = useState(false);
 
@@ -52,6 +54,18 @@ export default function BarraDeNavegacao() {
                 Início
               </NavLink>
             </li>
+
+            {usuarioLogado?.perfil === "SINDICO" && (
+              <li className="nav-item">
+                <NavLink
+                  className="nav-link"
+                  to="/usuarios"
+                  onClick={fecharMenu}
+                >
+                  Usuários
+                </NavLink>
+              </li>
+            )}
           </ul>
 
           {!carregandoSessao && (
@@ -60,7 +74,8 @@ export default function BarraDeNavegacao() {
                 <>
                   <li className="nav-item">
                     <span className="navbar-text me-md-3">
-                      {usuarioLogado.nome}
+                      {usuarioLogado.nome} (
+                      {rotuloDoPerfil(usuarioLogado.perfil)})
                     </span>
                   </li>
                   <li className="nav-item">

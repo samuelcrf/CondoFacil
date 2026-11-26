@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import CampoDeFormulario from "../componentes/CampoDeFormulario.jsx";
 import { useAutenticacao } from "../contexto/useAutenticacao.js";
@@ -7,6 +7,9 @@ import { useAutenticacao } from "../contexto/useAutenticacao.js";
 export default function PaginaDeLogin() {
   const { entrarNoSistema } = useAutenticacao();
   const navegarPara = useNavigate();
+  const localizacaoAtual = useLocation();
+
+  const paginaDeDestino = localizacaoAtual.state?.origem ?? "/";
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -14,13 +17,12 @@ export default function PaginaDeLogin() {
   const [enviando, setEnviando] = useState(false);
 
   async function aoEnviarFormulario(evento) {
-    // Impede o comportamento padrão do navegador
     evento.preventDefault();
     setMensagemDeErro("");
     setEnviando(true);
     try {
       await entrarNoSistema(email, senha);
-      navegarPara("/");
+      navegarPara(paginaDeDestino, { replace: true });
     } catch (erro) {
       setMensagemDeErro(erro.message);
       setEnviando(false);
