@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,36 +23,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.condofacil.erro.RespostaDeErro;
 import jakarta.servlet.http.HttpServletResponse;
 
-//configuraçoes de segurança da api
+//Liga as anotações de permissão nos métodos dos controladores
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class ConfiguracaoDeSeguranca {
 
 	private static final String MENSAGEM_DE_LOGIN_INVALIDO = "E-mail ou senha incorretos.";
+	private static final String MENSAGEM_DE_ACESSO_NEGADO = "Você não tem permissão para realizar esta ação.";
 
 	@Bean
 	public SecurityFilterChain cadeiaDeFiltrosDeSeguranca(HttpSecurity http, ObjectMapper conversorDeJson)
 			throws Exception {
 
 		http
-
+				//csrf
 				.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 						.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
 				.addFilterAfter(new FiltroDeCookieCsrf(), BasicAuthenticationFilter.class)
 
-				
+				//qual autor pode acessar o que
 				.authorizeHttpRequests(regras -> regras
-						
+						// Endereços públicos (não exigem login)
 						.requestMatchers(HttpMethod.GET, "/api/saude").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/condominios").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/autenticacao/login", "/api/autenticacao/logout")
 						.permitAll()
-						
+
 						.requestMatchers("/api/**").authenticated()
-						
+
 						.anyRequest().permitAll())
 
-				
+
 				.formLogin(login -> login.loginPage("/login").loginProcessingUrl("/api/autenticacao/login")
 						.usernameParameter("email").passwordParameter("senha")
 						.successHandler((requisicao, resposta, autenticacao) -> {
@@ -68,20 +71,22 @@ public class ConfiguracaoDeSeguranca {
 								HttpStatus.UNAUTHORIZED, new RespostaDeErro(MENSAGEM_DE_LOGIN_INVALIDO, Map.of())))
 						.permitAll())
 
-
+				//logout
+				// Encerra a sessão no servidor e apaga o cookie
 				.logout(logout -> logout.logoutUrl("/api/autenticacao/logout").invalidateHttpSession(true)
 						.deleteCookies("JSESSIONID")
 						.logoutSuccessHandler((requisicao, resposta, autenticacao) -> resposta
 								.setStatus(HttpStatus.NO_CONTENT.value()))
 						.permitAll())
 
-
 				.exceptionHandling(
-						erros -> erros.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+						erros -> erros.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+								.accessDeniedHandler((requisicao, resposta, excecao) -> escreverJson(conversorDeJson,
+										resposta, HttpStatus.FORBIDDEN,
+										new RespostaDeErro(MENSAGEM_DE_ACESSO_NEGADO, Map.of()))));
 
 		return http.build();
 	}
-
 
 	private static void escreverJson(ObjectMapper conversorDeJson, HttpServletResponse resposta, HttpStatus status,
 			Object corpo) throws IOException {
