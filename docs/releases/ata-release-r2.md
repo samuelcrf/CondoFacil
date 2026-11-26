@@ -70,7 +70,7 @@ A planilha de riscos foi atualizada com 3 riscos de Segurança, tratados na Feat
 | Criar `docs/sprints/` e `docs/releases/` com as atas e relatórios | Samuel | 26/11/2026 |
 | Completar o README (como executar e como testar) | Samuel |Pendente |
 | Configurar o JaCoCo e ativar o Dependabot | Samuel | Sprint 4 |
-| Criar a tag e a release v0.2.0 no GitHub | Samuel | Pendente |
+| Criar a tag e a release no GitHub | Samuel | Pendente |
 
 ## 8. Gestão e papéis para a próxima release
 
