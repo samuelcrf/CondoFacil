@@ -6,7 +6,7 @@ O sistema permite que o síndico cadastre o condomínio e seus moradores e prest
 
 ## Tecnologias
 
-- **Back-end:** Java 21, Spring Boot 3.5.7 (Web, Validation, Data JPA, Security), Flyway
+- **Back-end:** Java 21, Spring Boot 3.5.7, Flyway
 - **Banco de dados:** PostgreSQL
 - **Front-end:** React 19, Vite, React Router e Bootstrap
 - **Testes:** JUnit e Mockito (back-end); oxlint e build (front-end)
